@@ -14,6 +14,8 @@ label_id = tk.Label(root, text='Student ID')
 label_id.pack(pady=(15,5))
 entry_id = tk.Entry(root, width=25)
 entry_id.pack()
+label_status = tk.Label(root, text='', fg='blue')
+label_status.pack(pady=(5,10))
 
 # student name label and entry
 label_name = tk.Label(root, text='Student Name')
@@ -63,5 +65,22 @@ def overview_student():
 # new botton Overview
 botton_overview = tk.Button(root, text='Overview', command=overview_student)
 botton_overview.pack(pady=25)
+
+# 新增刪除按鈕
+def delete_data():
+    student_id = entry_id.get()  # 取得輸入框中的學號
+
+    if not student_id:
+        label_status.config(text="請輸入學號再刪除")
+        return
+
+    cursor.execute("DELETE FROM DB_student WHERE db_student_id = ?", (student_id,))
+    conn.commit()
+
+    label_status.config(text=f"已刪除學號 {student_id} 的資料")
+    print(f"已刪除學號 {student_id} 的資料")
+
+button_delete = tk.Button(root, text="Delete", command=delete_data)
+button_delete.pack(pady=10)
 
 root.mainloop() #must be put to the end of programming code
